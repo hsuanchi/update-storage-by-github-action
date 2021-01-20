@@ -23,7 +23,7 @@ jobs:
     - id: upload-file
       uses: google-github-actions/upload-cloud-storage@main
       with:
-        path: /
+        path: ..
         # path: ../update-storage-by-github-action/
         destination: demo-2021
 
