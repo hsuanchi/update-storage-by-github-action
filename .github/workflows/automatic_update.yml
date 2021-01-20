@@ -20,11 +20,16 @@ jobs:
         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
         export_default_credentials: true
 
-    - name: Setup - gcloud / gsutil
-      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-      with:
-          path: ./update-storage-by-github-action
-          destination: demo-2021
+    - name: Deploy
+      run: |-
+        gsutil -m rsync -R output gs://demo-2021
+
+
+    # - name: Setup - gcloud / gsutil
+    #   uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+    #   with:
+    #       path: ./update-storage-by-github-action
+    #       destination: demo-2021
 
 
 
