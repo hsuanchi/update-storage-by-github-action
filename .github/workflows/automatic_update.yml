@@ -14,5 +14,5 @@ jobs:
         uses: google-github-actions/upload-cloud-storage@main
         with:
           credentials: ${{ secrets.gcp_credentials }}
-          path: ../
+          path: /hsuanchi/update-storage-by-github-action/
           destination: demo-2021
