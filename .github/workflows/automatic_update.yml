@@ -1,23 +1,9 @@
-# jobs:
-#   build:
-#     - name: Checkout
-#       uses: actions/checkout@v2
-#     - name: upload file
-#       # runs-on: ubuntu-latest 
-#       steps:
-#         - id: upload-file
-#           uses: google-github-actions/upload-cloud-storage@main
-#           with:
-#             credentials: ${{ secrets.gcp_credentials }}
-#             destination: demo-2021
-
-  
 name: Build and Deploy to Google Cloud Storage
 
 on:
   push:
     branches:
-    - master
+    - main
 
 jobs:
   setup-build-deploy:
@@ -34,3 +20,16 @@ jobs:
           credentials: ${{ secrets.gcp_credentials }}
           path: ./update-storage-by-github-action
           destination: demo-2021
+
+# jobs:
+#   build:
+#     - name: Checkout
+#       uses: actions/checkout@v2
+#     - name: upload file
+#       # runs-on: ubuntu-latest 
+#       steps:
+#         - id: upload-file
+#           uses: google-github-actions/upload-cloud-storage@main
+#           with:
+#             credentials: ${{ secrets.gcp_credentials }}
+#             destination: demo-2021
