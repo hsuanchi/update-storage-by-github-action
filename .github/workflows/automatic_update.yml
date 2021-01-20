@@ -21,7 +21,6 @@ jobs:
           path: ./update-storage-by-github-action
           destination: demo-2021
           export_default_credentials: true
-          
 
 
 # jobs:
