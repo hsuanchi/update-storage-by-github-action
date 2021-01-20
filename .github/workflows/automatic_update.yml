@@ -20,6 +20,7 @@ jobs:
           credentials: ${{ secrets.gcp_credentials }}
           path: ./update-storage-by-github-action
           destination: demo-2021
+          export_default_credentials: true
 
 # jobs:
 #   build:
