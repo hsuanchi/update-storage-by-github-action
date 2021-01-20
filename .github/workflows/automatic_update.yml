@@ -6,10 +6,13 @@ on:
     - main
 
 jobs:
-  steps:
-    - id: upload-file
-      uses: google-github-actions/upload-cloud-storage@main
-      with:
-        credentials: ${{ secrets.gcp_credentials }}
-        path: ./
-        destination: demo-2021
+  build:
+    name: upload file
+    runs-on: ubuntu-latest 
+    steps:
+      - id: upload-file
+        uses: google-github-actions/upload-cloud-storage@main
+        with:
+          credentials: ${{ secrets.gcp_credentials }}
+          path: ./
+          destination: demo-2021
