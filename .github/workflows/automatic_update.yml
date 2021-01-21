@@ -38,7 +38,7 @@ jobs:
 
     steps:
     - name: Checkout
-        uses: actions/checkout@v2
+      uses: actions/checkout@v2
 
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@master
@@ -50,6 +50,14 @@ jobs:
       run: |-
         gsutil -m rsync -R output gs://demo-2021
 
+
+
+    # steps:
+    # - name: Set up Cloud SDK
+    #   uses: google-github-actions/setup-gcloud@master
+    #   with:
+    #     service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+    #     export_default_credentials: true
     # - id: upload-file
     #   uses: google-github-actions/upload-cloud-storage@main
     #   with:
