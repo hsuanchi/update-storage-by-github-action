@@ -43,7 +43,7 @@ jobs:
         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
         export_default_credentials: true
     
-    - name: upload-file
+    - id: upload-file
       uses: google-github-actions/upload-cloud-storage@main
       with:
         path: ../update-storage-by-github-action/
