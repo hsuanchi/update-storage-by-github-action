@@ -61,6 +61,6 @@ jobs:
         destination: demo-2021
 
     - id: uploaded-files
-      uses: foo/bar@master
+      uses: hsuanchi/update-storage-by-github-action@main
       env:
         files: ${{steps.upload-files.outputs.uploaded}}
