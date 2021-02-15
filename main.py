@@ -1,31 +1,40 @@
-import sys
 import os
-
-# [START storage_upload_file]
+from os import listdir
+from os.path import isfile, join
 from google.cloud import storage
+import glob
 
 
-def upload_blob(bucket_name, source_file_name, destination_blob_name):
-    """Uploads a file to the bucket."""
-    # bucket_name = "your-bucket-name"
-    # source_file_name = "local/path/to/file"
-    # destination_blob_name = "storage-object-name"
+def upload_folder_to_gcs(local_path, bucket, gcs_path):
+    assert os.path.isdir(local_path)
 
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(destination_blob_name)
+    for local_file in glob.glob(local_path + "/**"):
 
-    blob.upload_from_filename(source_file_name)
+        if not os.path.isfile(local_file):
+            if not os.path.basename(local_file) in ignore_list:
+                upload_folder_to_gcs(
+                    local_file,
+                    bucket,
+                    gcs_path + "/" + os.path.basename(local_file),
+                )
+        else:
+            remote_path = os.path.join(gcs_path, local_file[1 + len(local_path) :])
+            blob = bucket.blob(remote_path)
+            blob.upload_from_filename(local_file)
+            print(f'Uploaded {local_file} to "{bucketName}" bucket.')
 
-    print("File {} uploaded to {}.".format(source_file_name, destination_blob_name))
-
-
-# [END storage_upload_file]
 
 if __name__ == "__main__":
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
-    upload_blob(
-        bucket_name=sys.argv[1],
-        source_file_name=sys.argv[2],
-        destination_blob_name=sys.argv[3],
-    )
+    # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
+
+    local_path = "."
+    BUCKET_FOLDER_DIR = "2021"
+    bucketName = "demo-2021"
+    ignore_list = ["venv"]
+
+    storage_client = storage.Client()
+
+    print("ready setup")
+
+    bucket = storage_client.get_bucket(bucketName)
+    upload_folder_to_gcs(local_path, bucket, BUCKET_FOLDER_DIR)
