@@ -31,7 +31,7 @@ if __name__ == "__main__":
     key_name = key_path.split("/")[-1]
 
     local_path = "."
-    bucket_forder = "2021"
+    bucket_forder = ""
     bucket_name = "demo-2021"
     ignore_list = ["venv", key_name]
 
