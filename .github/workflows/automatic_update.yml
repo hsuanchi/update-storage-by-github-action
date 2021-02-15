@@ -25,7 +25,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@master
       with:
         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-        export_default_credentials: true
+        export_default_credentials: false
 
     # 建立環境
     - name: Install Dependencies
@@ -35,8 +35,6 @@ jobs:
 
     # Upload Folder
     - name: Run Upload
-      # env:
-        # GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
       run: |
         python3 main.py
 
