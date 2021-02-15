@@ -1,8 +1,9 @@
+import glob
 import os
 from os import listdir
 from os.path import isfile, join
+
 from google.cloud import storage
-import glob
 
 
 def upload_folder_to_gcs(local_path, bucket, gcs_path):
@@ -21,20 +22,19 @@ def upload_folder_to_gcs(local_path, bucket, gcs_path):
             remote_path = os.path.join(gcs_path, local_file[1 + len(local_path) :])
             blob = bucket.blob(remote_path)
             blob.upload_from_filename(local_file)
-            print(f'Uploaded {local_file} to "{bucketName}" bucket.')
+            print(f'Uploaded {local_file} to "{bucket_name}" bucket.')
 
 
 if __name__ == "__main__":
     # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
-    print(os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
+    key_path = os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
+    key_name = key_path.split("/")[-1]
+
     local_path = "."
-    BUCKET_FOLDER_DIR = "2021"
-    bucketName = "demo-2021"
-    ignore_list = ["venv"]
+    bucket_forder = "2021"
+    bucket_name = "demo-2021"
+    ignore_list = ["venv", key_name]
 
     storage_client = storage.Client()
-
-    print("ready setup")
-
-    bucket = storage_client.get_bucket(bucketName)
-    upload_folder_to_gcs(local_path, bucket, BUCKET_FOLDER_DIR)
+    bucket = storage_client.get_bucket(bucket_name)
+    upload_folder_to_gcs(local_path, bucket, bucket_forder)
