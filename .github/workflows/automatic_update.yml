@@ -21,7 +21,12 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@master
+      with:
+        service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+        export_default_credentials: true
+
     # 建立環境
     - name: Install Dependencies
       run: |
@@ -30,8 +35,8 @@ jobs:
 
     # Upload Folder
     - name: Run Upload
-      env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+      # env:
+        # GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
       run: |
         python3 main.py
 
