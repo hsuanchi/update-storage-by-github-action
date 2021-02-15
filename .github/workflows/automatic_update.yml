@@ -82,7 +82,7 @@ jobs:
       with:
         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
         export_default_credentials: true
-        
+
     - name: Deploy
       run: |-
-        gsutil -m rsync -R output gs://$GCS_BUCKET
+        gsutil -m rsync -R output gs://demo-2021
