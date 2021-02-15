@@ -25,7 +25,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@master
       with:
         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-        # export_default_credentials: false
+        export_default_credentials: true
 
     # 建立環境
     - name: Install Dependencies
