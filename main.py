@@ -29,6 +29,7 @@ if __name__ == "__main__":
     # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
     key_path = os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
     key_name = key_path.split("/")[-1]
+    print(key_name)
 
     local_path = "."
     bucket_forder = "2021"
