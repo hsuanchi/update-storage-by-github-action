@@ -16,7 +16,7 @@ def upload_folder_to_gcs(local_path, bucket, gcs_path):
                 upload_folder_to_gcs(
                     local_file,
                     bucket,
-                    gcs_path + os.path.basename(local_file),
+                    gcs_path + "/" + os.path.basename(local_file),
                 )
             else:
                 remote_path = os.path.join(gcs_path, local_file[1 + len(local_path) :])
