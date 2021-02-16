@@ -22,7 +22,7 @@ def upload_folder_to_gcs(local_path, bucket, gcs_path):
                 remote_path = os.path.join(gcs_path, local_file[1 + len(local_path) :])
                 blob = bucket.blob(remote_path)
                 blob.upload_from_filename(local_file)
-                print(f'Uploaded {local_file} to "{bucket_name}" bucket.')
+                print(f'Uploaded {local_file} to "{bucket_name}" bucket. {remote_path}')
 
 
 if __name__ == "__main__":
