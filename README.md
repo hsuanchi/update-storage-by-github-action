@@ -1,26 +1,20 @@
 # GitHub Action 上傳 github repo 至 GCP Storage
 
-## 專案環境
-
-此次使用套件：
+## 專案夾結構：
 ```
-google-cloud-storage
-```
-
-
-此次專案資料夾結構：
-```
-
 ├── README.md
-├── main.py
+├── .github
+│   └── workflow
+│     └── automatic_update.yml
+│
 ├── forder # 測試單層 folder
 │   └── test.html
+│
 └── static # 測試多層 folder
     ├── css
     ├── js
     └── media
 ```
-
 
 ## 步驟一. GCP Sotrage 設定
 
@@ -63,83 +57,31 @@ on:
 Virtual environment，想修改 `ubuntu-latest` 的話可以參考這篇 [Specifications for GitHub-hosted runners](https://docs.github.com/en/actions/reference/specifications-for-github-hosted-runners)
 ```
 jobs:
-  setup-build-deploy:
-    name: Setup and Upload
+  job:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.7]
+```
+首先使用 public action [actions/checkout@v2](https://github.com/actions/checkout) 來 check out repository，讓 workflow 中能使用 `$GITHUB_WORKSPACE` 變數來存取專案
+```
+steps:
+      - uses: actions/checkout@v2
+      - name: Check out repository
+        run: ls -lah $GITHUB_WORKSPACE
+```
+接下來使用 [google-github-actions/upload-cloud-storage@master](https://github.com/google-github-actions/upload-cloud-storage) 來 uploads files/forders 到 GCP Storage 上
+```
+      - name: Upload google-cloud-storage
+        uses: GoogleCloudPlatform/github-actions/upload-cloud-storage@master
+        with:
+          path: ${{ github.workspace }}
+          destination: pycon2021
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+
 ```
 
-接下來首先使用 public action `actions/checkout@v2` 來建立 python 環境，再使用 `google-github-actions/setup-gcloud@master` 來通過 gcloud 的憑證，最後再執行我們寫好的 `main.py` 腳本
-```
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
+## 步驟三. 設定 GitHub Action Secrets key
 
-    - name: Set up gcs account_key
-      uses: google-github-actions/setup-gcloud@master
-      with:
-        service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-        export_default_credentials: true
-
-    - name: Install google-cloud-storage
-      run: |
-        python -m pip install --upgrade pip
-        pip3 install google-cloud-storage
-    - name: Run upload
-      run: |
-        python3 main.py
-```
-
-完整 code 存放在 [automatic_update.yml](https://github.com/hsuanchi/update-storage-by-github-action/blob/main/.github/workflows/automatic_update.yml)
-
-## 步驟三. Python upload GCP Storage 程式
-
-首先定義一下變數：
-
-* local_path: 本地要上傳資料夾的位置
-* bucket_name: 上傳至 GCS Bucket 的位置
-* bucket_forder: 上傳至 GCS Bucket 內的特定資料夾
-* ignore_list: 這邊是排除清單
-
-```
-local_path = "."
-bucket_forder = ""
-bucket_name = "demo-2021"
-ignore_list = ["venv", key_name]
-```
-
-因為 GCP Sorage API 並沒有提供一次上傳完整資料夾的功能，只能單筆上傳，所以這邊寫了一個遞迴，來上傳資料夾：
-```
-def upload_folder_to_gcs(local_path, bucket, gcs_path):
-    assert os.path.isdir(local_path)
-
-    for local_file in glob.glob(local_path + "/**"):
-
-        if not os.path.basename(local_file) in ignore_list:
-            if not os.path.isfile(local_file):
-                upload_folder_to_gcs(
-                    local_file,
-                    bucket,
-                    gcs_path + "/" + os.path.basename(local_file),
-                )
-            else:
-                remote_path = os.path.join(gcs_path, local_file[1 + len(local_path) :])
-                blob = bucket.blob(remote_path)
-                blob.upload_from_filename(local_file)
-                print(f'Uploaded {local_file} to "{bucket_name}" bucket. {remote_path}')
-```
-更多關於 GCS 的 CRUD 操作可以參考官方的這篇 [python-docs-samples/storage/](https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/storage/cloud-client)
-
-關於完整 Python code 存放在 [main.py](https://github.com/hsuanchi/update-storage-by-github-action/blob/main/main.py)
-
+到專案資料夾，選擇 setting > Secrets，將剛剛在 GCP 拿到的憑證內容完整貼上去就可以囉！
+<img src="https://github.com/hsuanchi/update-storage-by-github-action/blob/main/image/github action secrets.jpg">
 
 最後只需要 `git push` 就可以看到以下畫面囉，然後再去 google cloud storage 確認有沒有上傳的檔案就完成了！
-
-<img src="https://github.com/hsuanchi/update-storage-by-github-action/blob/main/image/github action check.jpg">
-
+<img src="https://github.com/hsuanchi/update-storage-by-github-action/blob/main/image/github action.jpg">

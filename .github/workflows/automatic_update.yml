@@ -6,32 +6,16 @@ on:
     - main
 
 jobs:
-  setup-build-deploy:
-    name: Setup and Upload
+  job:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.7]
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
+      - uses: actions/checkout@v2
+      - name: Check out repository
+        run: ls -lah $GITHUB_WORKSPACE
 
-    - name: Set up gcs account_key
-      uses: google-github-actions/setup-gcloud@master
-      with:
-        service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-        export_default_credentials: true
-
-    - name: Install google-cloud-storage
-      run: |
-        python -m pip install --upgrade pip
-        pip3 install google-cloud-storage
-
-    - name: Run upload
-      run: |
-        python3 main.py
+      - name: Upload google-cloud-storage
+        uses: GoogleCloudPlatform/github-actions/upload-cloud-storage@master
+        with:
+          path: ${{ github.workspace }}
+          destination: demo-2021
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
