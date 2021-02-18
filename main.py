@@ -28,7 +28,6 @@ def upload_folder_to_gcs(local_path, bucket, gcs_path):
 
 
 if __name__ == "__main__":
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
     key_path = os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
     key_name = key_path.split("/")[-1]
 
