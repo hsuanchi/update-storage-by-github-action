@@ -13,6 +13,7 @@ def upload_folder_to_gcs(local_path, bucket, gcs_path):
 
         if not os.path.basename(local_file) in ignore_list:
             if not os.path.isfile(local_file):
+
                 upload_folder_to_gcs(
                     local_file,
                     bucket,
@@ -20,18 +21,19 @@ def upload_folder_to_gcs(local_path, bucket, gcs_path):
                 )
             else:
                 remote_path = os.path.join(gcs_path, local_file[1 + len(local_path) :])
+
                 blob = bucket.blob(remote_path)
                 blob.upload_from_filename(local_file)
                 print(f'Uploaded {local_file} to "{bucket_name}" bucket. {remote_path}')
 
 
 if __name__ == "__main__":
-    # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
     key_path = os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
     key_name = key_path.split("/")[-1]
 
     local_path = "."
-    bucket_forder = ""
+    bucket_forder = "pycon"
     bucket_name = "demo-2021"
     ignore_list = ["venv", key_name]
 
