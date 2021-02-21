@@ -16,7 +16,7 @@
     └── media
 ```
 
-## 步驟一. GCP Sotrage 設定
+## 步驟一. GCP Storage 設定
 
 1. 創建 Bucket
 
