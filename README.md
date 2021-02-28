@@ -136,7 +136,7 @@ def upload_folder_to_gcs(local_path, bucket, gcs_path):
 ```
 更多關於 GCS 的 CRUD 操作可以參考官方的這篇 [python-docs-samples/storage/](https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/storage/cloud-client)
 
-關於完整 Python code 存放在 [main.py](https://github.com/hsuanchi/update-storage-by-github-action/blob/main/main.py)
+關於完整 Python code 存放在 [main.py](https://github.com/hsuanchi/update-storage-by-github-action/blob/python-script-upload/main.py)
 
 
 最後只需要 `git push` 就可以看到以下畫面囉，然後再去 google cloud storage 確認有沒有上傳的檔案就完成了！
